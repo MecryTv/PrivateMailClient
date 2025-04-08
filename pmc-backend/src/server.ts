@@ -59,6 +59,24 @@ app.get('/api/emails', (req, res) => {
   emailController.getEmails(req, res);
 });
 
+// E-Mail-Adressen für Antwort/Weiterleiten in der Frontend-Anwendung
+// Diese Zeile wird explizit neu definiert, um sicherzustellen, dass sie richtig registriert ist
+app.get('/api/mails/email-addresses', (req, res) => {
+  logger.info('Route /api/mails/email-addresses wurde aufgerufen');
+  emailController.getEmailAddresses(req, res);
+});
+
+// Alternative Route, falls die ursprüngliche nicht funktioniert
+app.get('/api/emails/addresses', (req, res) => {
+  logger.info('Alternative Route /api/emails/addresses wurde aufgerufen');
+  emailController.getEmailAddresses(req, res);
+});
+
+// Echtzeit-Überprüfung, ob eine E-Mail-Adresse existiert
+app.get('/api/emails/check', (req, res) => {
+  emailController.checkEmailExists(req, res);
+});
+
 app.post('/api/emails', (req, res) => {
   emailController.addEmail(req, res);
 });

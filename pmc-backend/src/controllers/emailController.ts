@@ -23,6 +23,41 @@ export default class EmailController {
   }
   
   /**
+   * Gibt nur die E-Mail-Adressen als String-Array zurück (für Dropdown-Menüs)
+   */
+  public getEmailAddresses = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const emails = await this.emailService.getEmails();
+      // Extrahiere nur die Adressen aus dem Ergebnis
+      const addresses = emails.map(email => email.address);
+      res.status(200).json({ addresses });
+    } catch (error) {
+      console.error('Fehler beim Abrufen der E-Mail-Adressen:', error);
+      res.status(500).json({ message: 'Interner Serverfehler' });
+    }
+  }
+  
+  /**
+   * Überprüft, ob eine bestimmte E-Mail-Adresse in der Datenbank existiert (Echtzeit-Überprüfung)
+   */
+  public checkEmailExists = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { email } = req.query;
+      
+      if (!email || typeof email !== 'string') {
+        res.status(400).json({ message: 'E-Mail-Adresse fehlt oder ist ungültig' });
+        return;
+      }
+      
+      const exists = await this.emailService.checkEmailExists(email);
+      res.status(200).json({ exists });
+    } catch (error) {
+      console.error('Fehler bei der Überprüfung der E-Mail-Adresse:', error);
+      res.status(500).json({ message: 'Interner Serverfehler' });
+    }
+  }
+  
+  /**
    * Fügt eine neue E-Mail-Adresse hinzu
    */
   public addEmail = async (req: Request, res: Response): Promise<void> => {

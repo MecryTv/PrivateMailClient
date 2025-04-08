@@ -1,9 +1,240 @@
 <div class="mails-container">
-    <!-- Toolbar für E-Mail-Aktionen -->
-    <app-toolbar></app-toolbar>
+    <!-- Header mit Suchfeld -->
+    <app-header></app-header>
     
-    <!-- E-Mail-Inhaltsbereich (wird später implementiert) -->
-    <div class="mail-content">
-        <p>E-Mail-Inhalte werden hier angezeigt</p>
+    <!-- Toolbar für E-Mail-Aktionen mit Pagination - nur anzeigen, wenn keine E-Mail ausgewählt ist -->
+    <app-toolbar *ngIf="!selectedEmail"
+        [totalItems]="totalEmails"
+        [itemsPerPage]="itemsPerPage"
+        [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)">
+    </app-toolbar>
+    
+    <!-- E-Mail-Liste und Inhaltsbereich -->
+    <div class="mail-content" [ngClass]="{'detail-view-active': selectedEmail}">
+        <div class="mail-list">
+            <div *ngIf="isLoading" class="loading-indicator">
+                <span>Lade E-Mails...</span>
+            </div>
+            
+            <div *ngIf="!isLoading && errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+            
+            <div *ngIf="!isLoading && !errorMessage && emails.length === 0" class="empty-message">
+                <span>Keine E-Mails vorhanden</span>
+            </div>
+            
+            <!-- Container für scrollbare Mail-Items -->
+            <div class="mail-list-items" *ngIf="!isLoading && !errorMessage && emails.length > 0">
+                <div *ngFor="let email of displayedEmails" class="mail-item" [ngClass]="{'unread': !email.isRead, 'selected': selectedEmail?.id === email.id}" (click)="selectEmail(email)">
+                <div class="mail-item-checkbox">
+                    <input type="checkbox" (click)="$event.stopPropagation()">
+                </div>
+                <div class="mail-item-avatar">
+                    <!-- Für Mail-Logos mit Fallback -->
+                    <img class="mail-logo" 
+                         [src]="email.senderFaviconUrls?.googleFavicon || 
+                                email.senderFaviconUrls?.duckDuckGoFavicon || 
+                                'https://via.placeholder.com/36/' + getColorForSender(email.sender) + '/FFFFFF?text=' + email.sender.charAt(0)" 
+                         [alt]="email.sender + ' Logo'"
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/36/' + this.getAttribute('data-color') + '/FFFFFF?text=' + this.getAttribute('data-initial');"
+                         [attr.data-color]="getColorForSender(email.sender)"
+                         [attr.data-initial]="email.sender.charAt(0)">
+                </div>
+                <div class="mail-item-details">
+                    <div class="sender-name" [ngStyle]="{'font-weight': !email.isRead ? '600' : 'normal'}">{{ email.sender || 'Unbekannt' }}</div>
+                    <div class="mail-subject" [ngStyle]="{'font-weight': !email.isRead ? '600' : 'normal'}">
+                      {{ email.subject || '(Kein Betreff)' }}
+                    </div>
+                </div>
+                <div class="mail-metadata">
+                    <div *ngIf="email.hasAttachment || (email.attachments && email.attachments.length > 0)" class="attachment-icon">
+                        <i class="fas fa-paperclip"></i>
+                        <span class="attachment-count">{{ email.attachments?.length || 1 }} Anhang</span>
+                    </div>
+                    <div class="mail-date">{{ formatDate(email.date) }}</div>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        <!-- E-Mail-Detailansicht -->
+        <div class="mail-detail" *ngIf="selectedEmail; else noMailSelected">
+            <!-- Action Bar mit Buttons -->
+            <div class="mail-detail-actions">
+                <div class="action-left">
+                    <button class="action-btn back-btn" (click)="closeDetailView()"><i class="fas fa-arrow-left"></i></button>
+                    <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    <button class="action-btn"><i class="fas fa-exclamation-triangle"></i></button>
+                    <button class="action-btn"><i class="fas fa-check"></i></button>
+                    <button class="action-btn"><i class="fas fa-folder"></i></button>
+                </div>
+                <div class="action-date">
+                    {{ formatDate(selectedEmail.date) }}
+                </div>
+            </div>
+            
+            <!-- E-Mail-Titel -->
+            <div class="mail-detail-title">
+                <h2>{{ selectedEmail.subject }}</h2>
+                <button class="star-btn"><i class="far fa-star"></i></button>
+            </div>
+            
+            <!-- Absender Info -->
+            <div class="mail-detail-sender-info">
+                <div class="sender-avatar">
+                    <img [src]="selectedEmail.senderFaviconUrls?.googleFavicon || 
+                           selectedEmail.senderFaviconUrls?.duckDuckGoFavicon || 
+                           'https://via.placeholder.com/36/' + getColorForSender(selectedEmail.sender) + '/FFFFFF?text=' + selectedEmail.sender.charAt(0)"
+                         [alt]="selectedEmail.sender + ' Avatar'"
+                         [attr.data-color]="getColorForSender(selectedEmail.sender)"
+                         [attr.data-initial]="selectedEmail.sender.charAt(0)">
+                </div>
+                <div class="sender-details">
+                    <div class="sender-name">{{ selectedEmail.sender }}</div>
+                    <div class="sender-email">Von: {{ selectedEmail.senderEmail || 'noreply@mecrytu.de' }}</div>
+                    <div class="receiver-email">An: user&#64;example.com</div>
+                </div>
+            </div>
+            
+            <!-- E-Mail-Content mit reduzierbarer Größe -->
+            <div class="mail-detail-content" [class.reduced]="isReplying || isForwarding">
+                <p *ngIf="selectedEmail.content">{{ selectedEmail.content }}</p>
+                <p *ngIf="!selectedEmail.content" class="no-content">Kein Inhalt verfügbar</p>
+            </div>
+            
+            <!-- Anhang-Bereich, nur wenn Anhänge vorhanden sind -->
+            <div *ngIf="selectedEmail.hasAttachment || (selectedEmail.attachments && selectedEmail.attachments.length > 0)" class="mail-attachments">
+                <h3 class="attachments-title">Anhänge ({{ selectedEmail.attachments?.length || 1 }})</h3>
+                <div class="attachment-list">
+                    <!-- Falls attachments Array existiert, dynamisch anzeigen -->
+                    <div class="attachment-item" *ngFor="let attachment of selectedEmail.attachments || []">
+                        <div class="attachment-icon">
+                            <i [class]="getFileIcon(attachment.name || attachment.filename || 'testdokument.pdf')"></i>
+                        </div>
+                        <div class="attachment-details">
+                            <div class="attachment-name">{{ attachment.name || attachment.filename || 'testdokument.pdf' }}</div>
+                            <div class="attachment-size">{{ attachment.size ? formatFileSize(attachment.size) : '235.5 KB' }}</div>
+                        </div>
+                        <button class="download-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Fallback wenn nur hasAttachment=true aber kein attachments Array -->
+                    <div class="attachment-item" *ngIf="selectedEmail.hasAttachment && (!selectedEmail.attachments || selectedEmail.attachments.length === 0)">
+                        <div class="attachment-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="attachment-details">
+                            <div class="attachment-name">testdokument.pdf</div>
+                            <div class="attachment-size">235.5 KB</div>
+                        </div>
+                        <button class="download-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons unten -->
+            <div class="mail-detail-bottom-actions" *ngIf="!isReplying && !isForwarding">
+                <button class="action-btn-large reply-btn" (click)="replyToEmail()"><i class="fas fa-reply"></i> Antworten</button>
+                <button class="action-btn-large forward-btn" (click)="forwardEmail()"><i class="fas fa-share"></i> Weiterleiten</button>
+            </div>
+            
+            <!-- Antwort/Weiterleiten Bereich -->
+            <div class="reply-section" *ngIf="isReplying || isForwarding">
+                <!-- Schritt 1: E-Mail-Adresse auswählen -->
+                <div *ngIf="replyStep === 1">
+                    <div class="reply-header">
+                        <div class="reply-title">{{ isReplying ? 'Antworten von:' : 'Weiterleiten von:' }}</div>
+                        <button class="close-reply-btn" (click)="cancelReply()"><i class="fas fa-times"></i></button>
+                    </div>
+                    
+                    <!-- Ziel-E-Mail beim Weiterleiten -->
+                    <div *ngIf="isForwarding" class="target-email-container">
+                        <div class="target-email-label">Weiterleiten an:</div>
+                        <div class="target-email-input-container">
+                            <input type="email" 
+                                   class="target-email-input" 
+                                   placeholder="Ziel E-Mail-Adresse eingeben..." 
+                                   [(ngModel)]="forwardTargetEmail"
+                                   (input)="validateForwardEmail()"
+                                   [class.valid]="isForwardEmailValid"
+                                   [class.invalid]="!isForwardEmailValid && forwardTargetEmail">
+                            
+                            <div *ngIf="forwardTargetEmail && !isForwardEmailValid" class="validation-message error">
+                                Bitte geben Sie eine gültige E-Mail-Adresse ein
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- E-Mail-Auswahlbereich -->
+                    <div class="email-selection">
+                        <div *ngIf="availableEmails.length === 0" class="no-emails-message">
+                            Keine Email adressen gefunden. Bitte füge welche hinzu
+                        </div>
+                        <div *ngFor="let email of availableEmails" 
+                             class="email-option" 
+                             [class.selected]="email === selectedReplyEmail"
+                             (click)="selectReplyEmail(email)">
+                            {{ email }}
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="reply-actions">
+                        <button class="reply-action-btn next-btn" 
+                                [disabled]="!selectedReplyEmail || (isForwarding && (!forwardTargetEmail || !isForwardEmailValid))" 
+                                (click)="nextStep()">Weiter</button>
+                        <button class="reply-action-btn cancel-btn" (click)="cancelReply()">Abbrechen</button>
+                    </div>
+                </div>
+                
+                <!-- Schritt 2: Text schreiben -->
+                <div *ngIf="replyStep === 2">
+                    <div class="reply-header">
+                        <div class="reply-title">
+                            {{ isReplying ? 'Antwort' : 'Weiterleitung' }} von: {{ selectedReplyEmail }} 
+                            <button class="edit-email-btn" (click)="previousStep()"><i class="fas fa-edit"></i> Ändern</button>
+                        </div>
+                        <div *ngIf="isForwarding" class="target-email-display">
+                            <span>Ziel: {{ forwardTargetEmail }}</span>
+                            <button class="edit-email-btn small" (click)="previousStep()"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                    
+                    <!-- Format-Buttons -->
+                    <div class="formatting-buttons">
+                        <button class="format-btn"><i class="fas fa-bold"></i></button>
+                        <button class="format-btn"><i class="fas fa-italic"></i></button>
+                        <button class="format-btn"><i class="fas fa-underline"></i></button>
+                        <button class="format-btn"><i class="fas fa-link"></i></button>
+                        <button class="format-btn"><i class="fas fa-code"></i></button>
+                    </div>
+                    
+                    <!-- Textbereich für Antwort -->
+                    <textarea class="reply-textarea" [(ngModel)]="replyContent"></textarea>
+                    
+                    <!-- Action Buttons -->
+                    <div class="reply-actions">
+                        <button class="reply-action-btn send-btn" (click)="sendReply()">Senden</button>
+                        <button class="reply-action-btn cancel-btn" (click)="cancelReply()">Abbrechen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Anzeige, wenn keine Mail ausgewählt wurde -->
+        <ng-template #noMailSelected>
+            <div class="mail-detail mail-detail-empty">
+                <div class="empty-state">
+                    <i class="fas fa-envelope-open"></i>
+                    <p>Wählen Sie eine E-Mail aus der Liste aus, um den Inhalt anzuzeigen.</p>
+                </div>
+            </div>
+        </ng-template>
     </div>
 </div>

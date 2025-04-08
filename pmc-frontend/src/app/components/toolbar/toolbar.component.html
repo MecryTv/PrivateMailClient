@@ -11,11 +11,17 @@
 
     <div class="toolbar-center">
         <div class="pagination">
-            <span class="page-info">1-25 von 28</span>
-            <button class="nav-button prev">
+            <span class="page-info">{{ paginationInfo }}</span>
+            <button class="nav-button prev" 
+                    [disabled]="!canNavigatePrevious"
+                    [class.disabled]="!canNavigatePrevious"
+                    (click)="navigateToPreviousPage()">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="nav-button next">
+            <button class="nav-button next" 
+                    [disabled]="!canNavigateNext"
+                    [class.disabled]="!canNavigateNext"
+                    (click)="navigateToNextPage()">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>

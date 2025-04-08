@@ -33,6 +33,29 @@ export default class EmailService {
       if (conn) conn.release();
     }
   }
+  
+  /**
+   * Überprüft, ob eine bestimmte E-Mail-Adresse in der Datenbank existiert
+   * @param email Die zu überprüfende E-Mail-Adresse
+   * @returns True, wenn die E-Mail-Adresse existiert, sonst False
+   */
+  async checkEmailExists(email: string): Promise<boolean> {
+    let conn: PoolConnection | undefined;
+    try {
+      conn = await this.pool.getConnection();
+      const result = await conn.query(
+        'SELECT COUNT(*) as count FROM email_addresses WHERE address = ?', 
+        [email]
+      );
+      logger.info(`Checked if email ${email} exists`);
+      return result[0].count > 0;
+    } catch (error) {
+      logger.error(`Fehler bei der Überprüfung der E-Mail-Adresse: ${error}`);
+      throw error;
+    } finally {
+      if (conn) conn.release();
+    }
+  }
 
   /**
    * Fügt eine neue E-Mail-Adresse hinzu

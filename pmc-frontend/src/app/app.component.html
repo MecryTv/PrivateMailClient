@@ -4,8 +4,6 @@
   
   <!-- Hauptinhalt-Bereich -->
   <div class="main-content" [ngClass]="{'with-sidebar': isAuthenticated}">
-    <!-- Header-Bedingung vorübergehend entfernt für Tests -->
-    <app-header *ngIf="isAuthenticated"></app-header>
     
     <!-- Router outlet für die Navigation zwischen den Komponenten -->
     <router-outlet></router-outlet>
