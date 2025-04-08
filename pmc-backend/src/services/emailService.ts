@@ -61,7 +61,8 @@ export default class EmailService {
         [emailAddress.address, emailAddress.user_id || null, now, now]
       );
       
-      const insertId = result.insertId;
+      // BigInt in Number umwandeln, um Serialisierungsprobleme zu vermeiden
+      const insertId = typeof result.insertId === 'bigint' ? Number(result.insertId) : result.insertId;
       
       // Hole die neu eingefügte E-Mail-Adresse
       const rows = await conn.query(

@@ -1,0 +1,102 @@
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 999999; /* Extrem hoher z-index, um sicherzustellen, dass es über allem liegt */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 400px;
+    min-width: 300px;
+    pointer-events: none; /* Damit das Element Klicks durchlässt */
+  }
+  
+  .toast {
+    padding: 0.75rem 1rem;
+    background-color: #1a1f2e; /* Dunkler Hintergrund wie in der App */
+    border-radius: 0.375rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.5);
+    opacity: 0.95; /* Leicht transparent */
+    transition: all 0.3s ease;
+    animation: toastIn 0.3s ease;
+    margin-bottom: 10px;
+    color: #e1e2e5; /* Hellere Textfarbe für bessere Lesbarkeit */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: auto; /* Ermöglicht Interaktionen mit dem Toast selbst */
+  }
+  
+  .toast-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .toast-message {
+    flex: 1;
+    margin-left: 0.25rem;
+  }
+  
+  .toast-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    color: #a0a0a0;
+  }
+  
+  .toast-close-btn:hover {
+    color: #ffffff;
+  }
+  
+  .toast-success {
+    border-left: 4px solid #28a745;
+    background-color: rgba(40, 167, 69, 0.2); /* Dunkelgrüner Hintergrund mit Transparenz */
+  }
+  
+  .toast-warning {
+    border-left: 4px solid #ffc107;
+    background-color: rgba(255, 193, 7, 0.2); /* Dunkelgelber Hintergrund mit Transparenz */
+  }
+  
+  .toast-danger {
+    border-left: 4px solid #dc3545;
+    background-color: rgba(220, 53, 69, 0.2); /* Dunkelroter Hintergrund mit Transparenz */
+  }
+  
+  .toast-info {
+    border-left: 4px solid #17a2b8;
+    background-color: rgba(23, 162, 184, 0.2); /* Dunkelblauer Hintergrund mit Transparenz */
+  }
+  
+  .toast .fas {
+    font-size: 1.1rem;
+  }
+  
+  .toast-success .fas {
+    color: #3cd458; /* Helleres Grün für bessere Sichtbarkeit */
+  }
+  
+  .toast-warning .fas {
+    color: #ffdb4a; /* Helleres Gelb für bessere Sichtbarkeit */
+  }
+  
+  .toast-danger .fas {
+    color: #ff5c6c; /* Helleres Rot für bessere Sichtbarkeit */
+  }
+  
+  .toast-info .fas {
+    color: #4dd0e5; /* Helleres Blau für bessere Sichtbarkeit */
+  }
+  
+  @keyframes toastIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  

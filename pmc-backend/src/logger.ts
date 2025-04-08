@@ -94,13 +94,16 @@ class Logger {
 
   private writeToLog(level: 'info' | 'warn' | 'error', message: string): void {
     const timestamp = this.getCurrentTimeString();
-    const logMessage = `${colors.grey}${timestamp} [${this.logIndex}]: ${level === 'info' ? colors.green : level === 'warn' ? colors.orange : colors.red}${level}${colors.reset} ${message}\n`;
+    const levelColor = level === 'info' ? colors.green : level === 'warn' ? colors.orange : colors.red;
+    
+    // Formatiere die Nachricht mit dem Typ in eckigen Klammern und in der entsprechenden Farbe
+    const logMessage = `${colors.grey}${timestamp}${colors.reset} ${levelColor}[${level}]${colors.reset} ${message}\n`;
     
     // Write to console
     process.stdout.write(logMessage);
     
     // Write to file without colors
-    const logMessageForFile = `${timestamp} [${this.logIndex}]: ${level} ${message}\n`;
+    const logMessageForFile = `${timestamp} [${level}] ${message}\n`;
     fs.appendFileSync(this.currentLogFile, logMessageForFile);
     
     // Increment counters

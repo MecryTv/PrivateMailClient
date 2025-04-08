@@ -1,1 +1,259 @@
-<p>sidebar works!</p>
+<div class="sidebar-app">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+          <button class="compose-btn">
+            <span class="compose-icon"><i class="fas fa-plus"></i></span>
+            <span>Neue Nachricht</span>
+          </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <h3 class="nav-title">Hauptmenü</h3>
+            <ul class="nav-list">
+              <li class="nav-item active">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-inbox"></i></span>
+                    <span class="nav-label">Posteingang</span>
+                    <span class="unread-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-star"></i></span>
+                    <span class="nav-label">Markiert</span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-paper-plane"></i></span>
+                    <span class="nav-label">Gesendet</span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
+                    <span class="nav-label">Entwürfe</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="nav-section">
+            <div class="section-header">
+              <h3 class="nav-title">Kategorien</h3>
+              <button class="add-category-btn" (click)="showCategoryModal()" title="Neue Kategorie">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <ul class="nav-list">
+              <li class="nav-item" *ngFor="let category of categories">
+                <div class="category-row">
+                  <!-- Kategorie-Inhalt -->
+                  <div class="nav-item-content" (click)="selectCategory(category)">
+                    <span class="nav-icon"><i class="fas {{ category.emoji || 'fa-tag' }}" [style.color]="category.color"></i></span>
+                    <span class="nav-label">{{ category.name }}</span>
+                  </div>
+                  
+                  <!-- Aktions-Buttons -->
+                  <div class="nav-item-actions">
+                    <button class="nav-action-btn edit-btn" (click)="$event.stopPropagation(); editCategory(category)" title="Kategorie bearbeiten">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="nav-action-btn delete-btn" (click)="$event.stopPropagation(); showDeleteConfirmation(category, $event)" title="Kategorie löschen">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  
+                  <!-- Inline-Löschbestätigung -->
+                  <div class="inline-confirmation" *ngIf="categoryToDelete === category">
+                    <span class="confirm-message">Löschen?</span>
+                    <button class="confirm-btn confirm-yes" (click)="$event.stopPropagation(); confirmDeleteCategory()">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="confirm-btn confirm-no" (click)="$event.stopPropagation(); cancelDelete()">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li class="no-categories" *ngIf="categories.length === 0">
+                <span class="empty-text">Keine Kategorien vorhanden</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="nav-section">
+            <h3 class="nav-title">Extras</h3>
+            <ul class="nav-list">
+              <li class="nav-item">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-trash"></i></span>
+                    <span class="nav-label">Papierkorb</span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                    <span class="nav-label">Spam</span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <div class="category-row">
+                  <div class="nav-item-content">
+                    <span class="nav-icon"><i class="fas fa-archive"></i></span>
+                    <span class="nav-label">Archiv</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="user-profile">
+            <div class="avatar logo-avatar">
+              <img src="/MyLogo.png" alt="MecryTv Logo" class="logo-image">
+            </div>
+            <div class="user-info">
+              <span class="username">MecryTv</span>
+            </div>
+            <button class="settings-btn" (click)="toggleSettingsMenu()"><i class="fas fa-cog"></i></button>
+            
+            <!-- Settings Menu Popup -->
+            <div class="settings-menu" *ngIf="showSettingsMenu">
+              <div class="menu-header">
+                <h3>Einstellungen</h3>
+                <button class="close-menu-btn" (click)="closeSettingsMenu()">×</button>
+              </div>
+              <div class="menu-content">
+                <button class="logout-btn" (click)="openEmailManager()">
+                  <span class="logout-icon"><i class="fas fa-envelope"></i></span>
+                  <span>E-Mail-Adressen verwalten</span>
+                </button>
+                
+                <div class="menu-divider"></div>
+                
+                <button class="logout-btn" (click)="logout()">
+                  <span class="logout-icon"><i class="fas fa-sign-out-alt"></i></span>
+                  <span>Abmelden</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+  <!-- Modal für Kategorie-Hinzufügen/Bearbeiten -->
+  <div class="modal-overlay" *ngIf="showCategoryManager">
+    <div class="modal-content category-modal">
+      <div class="modal-header">
+        <h3>{{ editingCategory ? 'Kategorie bearbeiten' : 'Neue Kategorie' }}</h3>
+        <button class="close-modal-btn" (click)="closeCategoryModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="categoryName">Name</label>
+          <input 
+            type="text" 
+            id="categoryName" 
+            [(ngModel)]="newCategory.name" 
+            placeholder="Kategoriename eingeben" 
+            class="form-control"
+            [class.has-error]="showCategoryError">
+          <div class="error-message" *ngIf="showCategoryError">
+            {{ categoryErrorMessage }}
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Farbe</label>
+          <div class="color-picker">
+            <div 
+              *ngFor="let color of availableColors" 
+              class="color-option"
+              [style.background-color]="color"
+              [class.selected]="newCategory.color === color"
+              (click)="selectColor(color)">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Symbol</label>
+          <div class="icon-picker">
+            <div 
+              *ngFor="let icon of suggestedIcons" 
+              class="icon-option"
+              [class.selected]="newCategory.emoji === icon"
+              (click)="selectIcon(icon)">
+              <i class="fas {{ icon }}"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="closeCategoryModal()">Abbrechen</button>
+        <button 
+          class="save-btn" 
+          [disabled]="isAddingCategory" 
+          (click)="saveCategory()">
+          {{ isAddingCategory ? 'Speichere...' : (editingCategory ? 'Aktualisieren' : 'Erstellen') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- E-Mail-Manager Modal -->
+  <div class="email-manager-modal" *ngIf="showEmailManager">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>E-Mail-Adressen verwalten</h3>
+        <button class="close-menu-btn" (click)="closeEmailManager()">×</button>
+      </div>
+      <div class="menu-content">
+        <div class="email-list email-list-large">
+          <div *ngIf="emailAddresses.length === 0" class="no-emails">
+            Keine E-Mail-Adressen vorhanden
+          </div>
+          <div *ngFor="let email of emailAddresses" class="email-item">
+            <span class="email-address">{{ email.address }}</span>
+            <button class="remove-email-btn" (click)="removeEmail(email.id)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="add-email-form">
+          <input 
+            type="email" 
+            class="email-input" 
+            [(ngModel)]="newEmailAddress" 
+            placeholder="Neue E-Mail-Adresse" 
+            [class.has-error]="showEmailError">
+          <button 
+            class="add-email-btn" 
+            [disabled]="isAddingEmail || !newEmailAddress" 
+            (click)="addEmail()">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div class="email-error" *ngIf="showEmailError">
+          {{ emailErrorMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

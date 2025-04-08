@@ -1,0 +1,164 @@
+/* Login styling that matches the email client's dark theme */
+:root {
+    --primary-color: #7952dc; /* Purple accent color */
+    --secondary-color: #2dd5c4; /* Turquoise highlights */
+    --bg-dark: #1e1e2d;
+    --bg-card: #252536;
+    --text-color: #ffffff;
+    --error-color: #ff5a5a;
+    --sql-error-bg: rgba(255, 0, 0, 0.1);
+    --sql-error-border: #ff3333;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    padding: 20px;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    padding: 30px;
+  }
+  
+  .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .login-header h1 {
+    color: var(--primary-color);
+    font-size: 28px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .subtitle {
+    color: #a9a9c8;
+    font-size: 16px;
+    margin: 0;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #3a3a5a;
+    border-radius: 8px;
+    background-color: #2a2a40;
+    color: var(--text-color);
+    font-size: 15px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(121, 82, 220, 0.2);
+  }
+  
+  input::placeholder {
+    color: #6c6c8b;
+  }
+  
+  .error-message {
+    padding: 10px 15px;
+    margin: 10px 0 20px;
+    background-color: rgba(255, 90, 90, 0.1);
+    border-radius: 6px;
+    color: var(--error-color);
+    font-size: 14px;
+    border-left: 3px solid var(--error-color);
+  }
+  
+  /* Special styling for SQL injection error */
+  .sql-injection-error {
+    padding: 12px 15px;
+    margin: 10px 0 20px;
+    background-color: var(--sql-error-bg);
+    border-radius: 6px;
+    color: var(--sql-error-border);
+    font-size: 14px;
+    border: 1px solid var(--sql-error-border);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    animation: pulse 2s infinite;
+  }
+  
+  .security-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+  
+  .login-button {
+    margin-top: 10px;
+    padding: 14px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    position: relative;
+  }
+  
+  .login-button:hover {
+    background-color: #8a66e5;
+  }
+  
+  .login-button:active {
+    transform: scale(0.98);
+  }
+  
+  .login-button:disabled {
+    background-color: #5c4295;
+    cursor: not-allowed;
+  }
+  
+  /* Loading spinner */
+  .loader {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }

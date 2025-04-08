@@ -1,17 +1,19 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MailsComponent } from './components/mails/mails.component';
-import { ListComponent } from './components/list/list.component';
-import { ListItemComponent } from './components/list-item/list-item.component';
-import { DetailsComponent } from './components/details/details.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { SearchComponent } from './components/search/search.component';
 import { TnotifyComponent } from './components/tnotify/tnotify.component';
+
+import { AuthInterceptor } from './interfaces/auth/auth.interceptor';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -19,19 +21,21 @@ import { TnotifyComponent } from './components/tnotify/tnotify.component';
     HeaderComponent,
     SidebarComponent,
     MailsComponent,
-    ListComponent,
-    ListItemComponent,
-    DetailsComponent,
     ToolbarComponent,
-    SearchComponent,
-    TnotifyComponent
+    TnotifyComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    provideHttpClient(withFetch()),
+    { provide: LOCALE_ID, useValue: 'de' }, // Setze Deutsch als Standard-Locale
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: LocationStrategy, useClass: PathLocationStrategy }
   ],
   bootstrap: [AppComponent]
 })

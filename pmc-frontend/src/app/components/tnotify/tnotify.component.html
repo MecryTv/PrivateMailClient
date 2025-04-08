@@ -1,1 +1,14 @@
-<p>tnotify works!</p>
+<div class="toast-container">
+    <div *ngFor="let toast of tnotify" 
+         class="toast" 
+         [ngClass]="getToastClass(toast.type)">
+      <div class="toast-header">
+        <i class="fas fa-{{getToastIcon(toast.type)}}"></i>
+        <div class="toast-message">{{toast.message}}</div>
+        <button class="toast-close-btn" (click)="removeToast(toast.id)">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  

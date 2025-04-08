@@ -110,9 +110,12 @@ export default class CategoryService {
         ]
       );
       
+      // BigInt in Number umwandeln, um Serialisierungsprobleme zu vermeiden
+      const insertId = typeof result.insertId === 'bigint' ? Number(result.insertId) : result.insertId;
+      
       const newCategory = {
         ...category,
-        id: result.insertId,
+        id: insertId,
         created_at: now,
         updated_at: now
       };

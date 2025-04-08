@@ -1,0 +1,14 @@
+.mails-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--background-dark);
+}
+
+.mail-content {
+    flex: 1;
+    overflow: auto;
+    padding: 1rem;
+    color: var(--text-medium);
+}

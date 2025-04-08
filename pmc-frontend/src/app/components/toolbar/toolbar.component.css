@@ -1,0 +1,137 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    height: 48px;
+    background-color: var(--background-medium);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-medium);
+    font-size: 0.85rem;
+}
+
+.toolbar-left, .toolbar-center, .toolbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-left {
+    min-width: 80px;
+}
+
+.toolbar-right {
+    justify-content: flex-end;
+}
+
+/* Checkbox styling */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: var(--background-medium);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+    content: '\2713'; /* Checkmark */
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    left: 2px;
+    top: -2px;
+}
+
+/* Dropdown toggle */
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.chevron-down::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--text-medium);
+    border-bottom: 2px solid var(--text-medium);
+    transform: rotate(45deg);
+    margin-top: -4px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    align-items: center;
+}
+
+.page-info {
+    margin-right: 8px;
+    color: var(--text-dim);
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    border-radius: 4px;
+}
+
+.nav-button:hover {
+    background-color: var(--hover-bg);
+}
+
+.nav-button.prev {
+    margin-right: 2px;
+}
+
+/* Action buttons */
+.action-button {
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.action-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-bright);
+}
+
+.action-button.delete:hover {
+    color: var(--danger);
+}
+
+.action-button i {
+    font-size: 14px;
+}

@@ -1,0 +1,26 @@
+/* Grundlegendes Layout der Anwendung */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Hauptinhalt-Bereich */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Hauptinhalt-Bereich mit Sidebar */
+.main-content.with-sidebar {
+  margin-left: 0; /* Die Sidebar existiert bereits als eigene Komponente */
+}
+
+/* Router-Outlet-Container sollte den restlichen Platz einnehmen */
+.main-content > router-outlet + * {
+  flex: 1;
+  overflow: auto;
+}

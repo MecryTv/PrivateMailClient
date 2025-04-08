@@ -1,0 +1,70 @@
+/* Der Header-Container wurde entfernt */
+
+.mail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+  
+  .search-bar {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.6rem 2.6rem 0.6rem 1.2rem;
+    border: 1px solid var(--background-medium);
+    border-radius: 24px;
+    font-size: 0.9rem;
+    outline: none;
+    background-color: var(--background-medium);
+    color: var(--text-bright);
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+  }
+  
+  .search-bar input::placeholder {
+    color: var(--text-dim);
+    opacity: 0.7;
+  }
+  
+  .search-bar input:focus {
+    border-color: var(--primary-color);
+    background-color: var(--background-dark);
+    box-shadow: 0 0 0 2px rgba(121, 82, 220, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+  }
+  
+  .search-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .search-bar:focus-within .search-button {
+    color: var(--primary-color);
+  }
+  
+  /* Das linke Suchsymbol wurde entfernt */
