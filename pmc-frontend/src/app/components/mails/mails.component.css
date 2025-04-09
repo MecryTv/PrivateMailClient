@@ -95,6 +95,16 @@
 .mail-item-checkbox {
     flex: 0 0 auto;
     margin-right: 10px;
+    cursor: pointer;
+}
+
+.mail-item-checkbox i {
+    font-size: 16px;
+    color: var(--text-medium);
+}
+
+.mail-item-checkbox i.fa-check-square {
+    color: var(--primary-color);
 }
 
 .mail-item-avatar {

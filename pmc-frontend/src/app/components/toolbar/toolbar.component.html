@@ -1,8 +1,7 @@
 <div class="toolbar">
     <div class="toolbar-left">
-        <div class="checkbox-container">
-            <input type="checkbox" id="select-all">
-            <label for="select-all"></label>
+        <div class="checkbox-container" (click)="toggleSelectAll()">
+            <i class="fas" [ngClass]="{'fa-square': !allSelected, 'fa-check-square': allSelected}"></i>
         </div>
         <div class="dropdown-toggle">
             <span class="chevron-down"></span>

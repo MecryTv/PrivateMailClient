@@ -7,7 +7,9 @@
         [totalItems]="totalEmails"
         [itemsPerPage]="itemsPerPage"
         [currentPage]="currentPage"
-        (pageChange)="onPageChange($event)">
+        [allSelected]="allEmailsSelected"
+        (pageChange)="onPageChange($event)"
+        (selectAllChange)="handleSelectAllChange($event)">
     </app-toolbar>
     
     <!-- E-Mail-Liste und Inhaltsbereich -->
@@ -28,8 +30,8 @@
             <!-- Container für scrollbare Mail-Items -->
             <div class="mail-list-items" *ngIf="!isLoading && !errorMessage && emails.length > 0">
                 <div *ngFor="let email of displayedEmails" class="mail-item" [ngClass]="{'unread': !email.isRead, 'selected': selectedEmail?.id === email.id}" (click)="selectEmail(email)">
-                <div class="mail-item-checkbox">
-                    <input type="checkbox" (click)="$event.stopPropagation()">
+                <div class="mail-item-checkbox" (click)="toggleEmailSelection(email, $event)">
+                    <i class="fas" [ngClass]="{'fa-square': !isEmailSelected(email), 'fa-check-square': isEmailSelected(email)}"></i>
                 </div>
                 <div class="mail-item-avatar">
                     <!-- Für Mail-Logos mit Fallback -->

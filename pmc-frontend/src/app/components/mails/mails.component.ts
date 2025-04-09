@@ -16,6 +16,10 @@ export class MailsComponent implements OnInit {
   errorMessage = '';
   selectedEmail: Email | null = null;
   
+  // E-Mail-Auswahl
+  selectedEmails: Set<number> = new Set<number>();
+  allEmailsSelected: boolean = false;
+  
   // States für Antworten/Weiterleiten
   isReplying = false;
   isForwarding = false;
@@ -138,6 +142,9 @@ export class MailsComponent implements OnInit {
     this.currentPage = newPage;
     // Wenn eine E-Mail ausgewählt ist, deselektieren wir sie beim Seitenwechsel
     this.selectedEmail = null;
+    // Setze Auswahlstatus zurück
+    this.selectedEmails.clear();
+    this.allEmailsSelected = false;
   }
   
   /**
@@ -196,6 +203,9 @@ export class MailsComponent implements OnInit {
    */
   selectEmail(email: Email): void {
     this.selectedEmail = email;
+    // Wenn E-Mail Details geöffnet werden, Auswahl zurücksetzen
+    this.selectedEmails.clear();
+    this.allEmailsSelected = false;
     
     // Wenn die E-Mail nicht als gelesen markiert ist, markieren wir sie jetzt als gelesen
     // In einer realen Anwendung würde hier ein API-Aufruf stehen
@@ -216,6 +226,58 @@ export class MailsComponent implements OnInit {
     this.forwardTargetEmail = '';
     this.isForwardEmailValid = false;
     this.replyStep = 1;
+  }
+  
+  /**
+   * Wählt eine E-Mail aus oder hebt die Auswahl auf (checkbox)
+   * @param email Die E-Mail, deren Auswahl geändert werden soll
+   * @param event Das Event, um Propagation zu verhindern
+   */
+  toggleEmailSelection(email: Email, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    
+    if (this.selectedEmails.has(email.id)) {
+      this.selectedEmails.delete(email.id);
+    } else {
+      this.selectedEmails.add(email.id);
+    }
+    
+    // Prüfe, ob alle E-Mails der aktuellen Seite ausgewählt sind
+    this.checkIfAllSelected();
+  }
+  
+  /**
+   * Prüft, ob alle Emails auf der aktuellen Seite ausgewählt sind
+   */
+  private checkIfAllSelected(): void {
+    this.allEmailsSelected = this.displayedEmails.length > 0 && 
+                             this.displayedEmails.every(email => this.selectedEmails.has(email.id));
+  }
+  
+  /**
+   * Prüft, ob eine bestimmte E-Mail ausgewählt ist
+   * @param email Die zu prüfende E-Mail
+   */
+  isEmailSelected(email: Email): boolean {
+    return this.selectedEmails.has(email.id);
+  }
+  
+  /**
+   * Wählt alle E-Mails auf der aktuellen Seite aus oder hebt die Auswahl auf
+   * @param selected Ob alle ausgewählt werden sollen (true) oder keiner (false)
+   */
+  handleSelectAllChange(selected: boolean): void {
+    this.allEmailsSelected = selected;
+    
+    if (selected) {
+      // Alle E-Mails der aktuellen Seite auswählen
+      this.displayedEmails.forEach(email => this.selectedEmails.add(email.id));
+    } else {
+      // Alle E-Mails der aktuellen Seite abwählen
+      this.displayedEmails.forEach(email => this.selectedEmails.delete(email.id));
+    }
   }
   
   /**

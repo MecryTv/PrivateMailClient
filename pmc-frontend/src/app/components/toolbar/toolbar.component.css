@@ -28,32 +28,16 @@
     display: flex;
     align-items: center;
     margin-right: 8px;
-}
-
-.checkbox-container input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    background-color: var(--background-medium);
-    border: 1px solid var(--border-color);
-    border-radius: 2px;
     cursor: pointer;
-    position: relative;
 }
 
-.checkbox-container input[type="checkbox"]:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+.checkbox-container i {
+    font-size: 16px;
+    color: var(--text-medium);
 }
 
-.checkbox-container input[type="checkbox"]:checked::after {
-    content: '\2713'; /* Checkmark */
-    position: absolute;
-    color: white;
-    font-size: 12px;
-    left: 2px;
-    top: -2px;
+.checkbox-container i.fa-check-square {
+    color: var(--primary-color);
 }
 
 /* Dropdown toggle */

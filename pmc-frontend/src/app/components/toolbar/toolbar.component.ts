@@ -10,8 +10,10 @@ export class ToolbarComponent {
   @Input() totalItems: number = 0;
   @Input() itemsPerPage: number = 25;
   @Input() currentPage: number = 1;
+  @Input() allSelected: boolean = false;
   
   @Output() pageChange = new EventEmitter<number>();
+  @Output() selectAllChange = new EventEmitter<boolean>();
   
   /**
    * Berechnet die aktuelle Anzeigeinformation (z.B. "1-25 von 100")
@@ -59,5 +61,13 @@ export class ToolbarComponent {
     if (this.canNavigateNext) {
       this.pageChange.emit(this.currentPage + 1);
     }
+  }
+  
+  /**
+   * Wechselt den Zustand der Auswahlbox zwischen ausgewählt und nicht ausgewählt
+   */
+  toggleSelectAll(): void {
+    this.allSelected = !this.allSelected;
+    this.selectAllChange.emit(this.allSelected);
   }
 }
