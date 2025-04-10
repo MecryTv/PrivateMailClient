@@ -424,3 +424,36 @@
     (pool connections: active=0 idle=0 limit=5)
 17:20:58 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10001ms
     (pool connections: active=0 idle=0 limit=5)
+17:29:32 2025-04-10 [info] Email Service initialized with MariaDB connection pool
+17:29:32 2025-04-10 [info] Category Service initialized with MariaDB connection pool
+17:29:32 2025-04-10 [info] Server is running on port 3000
+17:31:52 2025-04-10 [info] Alternative Route /api/emails/addresses wurde aufgerufen
+17:32:02 2025-04-10 [error] Fehler beim Abrufen der Kategorien: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10014ms
+    (pool connections: active=0 idle=0 limit=5)
+17:32:02 2025-04-10 [error] Fehler beim Abrufen der Kategorien: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10014ms
+    (pool connections: active=0 idle=0 limit=5)
+17:32:02 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10010ms
+    (pool connections: active=0 idle=0 limit=5)
+17:32:02 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10006ms
+    (pool connections: active=0 idle=0 limit=5)
+17:34:24 2025-04-10 [info] Alternative Route /api/emails/addresses wurde aufgerufen
+17:34:33 2025-04-10 [error] Fehler beim Abrufen der Kategorien: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10000ms
+    (pool connections: active=0 idle=0 limit=5)
+17:34:33 2025-04-10 [error] Fehler beim Abrufen der Kategorien: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10000ms
+    (pool connections: active=0 idle=0 limit=5)
+17:34:34 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10006ms
+    (pool connections: active=0 idle=0 limit=5)
+17:34:34 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10013ms
+    (pool connections: active=0 idle=0 limit=5)
+17:38:41 2025-04-10 [info] Email Service initialized with MariaDB connection pool
+17:38:41 2025-04-10 [info] Category Service initialized with MariaDB connection pool
+17:38:41 2025-04-10 [info] Server is running on port 3000
+17:38:56 2025-04-10 [info] Alternative Route /api/emails/addresses wurde aufgerufen
+17:39:06 2025-04-10 [error] Fehler beim Abrufen der Kategorien: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10003ms
+    (pool connections: active=0 idle=0 limit=5)
+17:39:06 2025-04-10 [error] Fehler beim Abrufen der Kategorien: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10003ms
+    (pool connections: active=0 idle=0 limit=5)
+17:39:06 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10004ms
+    (pool connections: active=0 idle=0 limit=5)
+17:39:06 2025-04-10 [error] Fehler beim Abrufen der E-Mail-Adressen: SqlError: (conn:-1, no: 45028, SQLState: HY000) pool timeout: failed to retrieve a connection from pool after 10008ms
+    (pool connections: active=0 idle=0 limit=5)

@@ -13,7 +13,8 @@
         (selectAllChange)="handleSelectAllChange($event)"
         (deleteSelectedEmails)="deleteSelectedEmails()"
         (moveSelectedEmails)="moveSelectedEmails()"
-        (cancelEmailSelection)="cancelSelection()">
+        (cancelEmailSelection)="cancelSelection()"
+        (filterChange)="applyFilter($event)">
     </app-toolbar>
     
     <!-- E-Mail-Liste und Inhaltsbereich -->

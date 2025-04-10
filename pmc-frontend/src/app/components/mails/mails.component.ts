@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 })
 export class MailsComponent implements OnInit {
   emails: Email[] = [];
+  filteredEmails: Email[] = [];
   isLoading = true;
   errorMessage = '';
   selectedEmail: Email | null = null;
@@ -19,6 +20,9 @@ export class MailsComponent implements OnInit {
   // E-Mail-Auswahl
   selectedEmails: Set<number> = new Set<number>();
   allEmailsSelected: boolean = false;
+  
+  // Filter-Status
+  currentFilter: 'all' | 'unread' | 'read' | 'flagged' = 'all';
   
   // Anzahl der ausgewählten E-Mails
   get selectedEmailsCount(): number {
@@ -71,6 +75,42 @@ export class MailsComponent implements OnInit {
   }
   
   /**
+   * Wendet einen Filter auf die E-Mail-Liste an
+   * @param filterType Art des Filters (all, unread, read, flagged)
+   */
+  applyFilter(filterType: 'all' | 'unread' | 'read' | 'flagged'): void {
+    this.currentFilter = filterType;
+    this.applyCurrentFilter();
+    
+    // Zurücksetzen der Seite und Auswahl
+    this.currentPage = 1;
+    this.selectedEmails.clear();
+    this.allEmailsSelected = false;
+  }
+  
+  /**
+   * Wendet den aktuellen Filter auf die E-Mail-Liste an
+   */
+  private applyCurrentFilter(): void {
+    // Filter anwenden
+    switch (this.currentFilter) {
+      case 'unread':
+        this.filteredEmails = this.emails.filter(email => !email.isRead);
+        break;
+      case 'read':
+        this.filteredEmails = this.emails.filter(email => email.isRead);
+        break;
+      case 'flagged':
+        this.filteredEmails = this.emails.filter(email => email.isFlagged);
+        break;
+      case 'all':
+      default:
+        this.filteredEmails = [...this.emails];
+        break;
+    }
+  }
+  
+  /**
    * Lädt verfügbare E-Mail-Adressen für die Antwort-Auswahl aus dem Backend
    */
   loadAvailableEmails(): void {
@@ -105,6 +145,16 @@ export class MailsComponent implements OnInit {
     this.emailService.getEmails().subscribe({
       next: (emails: Email[]) => {
         this.emails = emails;
+        
+        // Für Test-Zwecke: einige E-Mails als markiert setzen
+        this.emails.forEach((email, index) => {
+          // Jede 4. E-Mail markieren (für Testzwecke)
+          email.isFlagged = index % 4 === 0;
+        });
+        
+        // Aktuellen Filter anwenden
+        this.applyCurrentFilter();
+        
         this.isLoading = false;
         
         // Debug-Ausgabe für die ersten E-Mails und deren Favicon-URLs
@@ -130,14 +180,14 @@ export class MailsComponent implements OnInit {
   get displayedEmails(): Email[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    return this.emails.slice(startIndex, endIndex);
+    return this.filteredEmails.slice(startIndex, endIndex);
   }
   
   /**
-   * Gibt die Gesamtzahl der E-Mails zurück
+   * Gibt die Gesamtzahl der gefilterten E-Mails zurück
    */
   get totalEmails(): number {
-    return this.emails.length;
+    return this.filteredEmails.length;
   }
   
   /**
@@ -294,6 +344,9 @@ export class MailsComponent implements OnInit {
     
     // Simulierte Löschoperation
     this.emails = this.emails.filter(email => !this.selectedEmails.has(email.id));
+    
+    // Gefilterte Liste aktualisieren
+    this.applyCurrentFilter();
     
     // Auswahl zurücksetzen
     this.selectedEmails.clear();

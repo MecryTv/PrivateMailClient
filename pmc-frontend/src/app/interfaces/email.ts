@@ -17,6 +17,7 @@ export interface Email {
   hasAttachment: boolean;
   attachments?: Array<any>; // Anhänge-Array für die Anzeige der Anzahl
   isRead: boolean;
+  isFlagged?: boolean; // Ob die E-Mail markiert/mit Stern versehen ist
   category?: string;
 }
 

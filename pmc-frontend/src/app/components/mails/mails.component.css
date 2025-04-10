@@ -93,18 +93,65 @@
 }
 
 .mail-item-checkbox {
-    flex: 0 0 auto;
-    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 25px;
+    margin-left: -8px; /* Nach links verschoben */
     cursor: pointer;
+    width: 18px;
+    height: 50px; /* Angepasst an die Höhe der Mail-Items */
+    position: relative;
 }
 
 .mail-item-checkbox i {
     font-size: 16px;
-    color: var(--text-medium);
+    color: transparent;
+    position: relative;
+    z-index: 1;
 }
 
-.mail-item-checkbox i.fa-check-square {
-    color: var(--primary-color);
+.mail-item-checkbox i.fa-square::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    border-radius: 2px;
+    background-color: var(--background-medium);
+    border: 1px solid var(--border-color);
+}
+
+.mail-item-checkbox i.fa-check-square::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    border-radius: 2px;
+    background-color: #785acb; /* Purple Farbe */
+    border: 1px solid #785acb;
+}
+
+.mail-item-checkbox i.fa-check-square::after {
+    content: "\f00c";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
 }
 
 .mail-item-avatar {

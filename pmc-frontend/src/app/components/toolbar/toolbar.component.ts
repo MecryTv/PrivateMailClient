@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
+
+export type FilterOption = 'all' | 'unread' | 'read' | 'flagged';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,6 +20,19 @@ export class ToolbarComponent {
   @Output() deleteSelectedEmails = new EventEmitter<void>();
   @Output() moveSelectedEmails = new EventEmitter<void>();
   @Output() cancelEmailSelection = new EventEmitter<void>();
+  @Output() filterChange = new EventEmitter<FilterOption>();
+  
+  // Dropdown-Zustand
+  isDropdownOpen: boolean = false;
+  selectedFilter: FilterOption = 'all';
+  
+  // Filter-Optionen
+  filterOptions: { value: FilterOption, label: string }[] = [
+    { value: 'all', label: 'Alle' },
+    { value: 'unread', label: 'Ungelesen' },
+    { value: 'flagged', label: 'Markiert' },
+    { value: 'read', label: 'Gelesen' }
+  ];
   
   /**
    * Berechnet die aktuelle Anzeigeinformation (z.B. "1-25 von 100")
@@ -94,5 +109,39 @@ export class ToolbarComponent {
    */
   cancelSelection(): void {
     this.cancelEmailSelection.emit();
+  }
+  
+  /**
+   * Öffnet oder schließt das Dropdown-Menü
+   */
+  toggleDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+  
+  /**
+   * Schließt das Dropdown-Menü, wenn außerhalb geklickt wird
+   */
+  @HostListener('document:click')
+  closeDropdown(): void {
+    this.isDropdownOpen = false;
+  }
+  
+  /**
+   * Wählt eine Filteroption aus und schließt das Dropdown
+   */
+  selectFilterOption(option: FilterOption, event: Event): void {
+    event.stopPropagation();
+    this.selectedFilter = option;
+    this.filterChange.emit(option);
+    this.isDropdownOpen = false;
+  }
+  
+  /**
+   * Gibt den anzuzeigenden Filternamen zurück
+   */
+  get currentFilterLabel(): string {
+    const option = this.filterOptions.find(opt => opt.value === this.selectedFilter);
+    return option ? option.label : 'Alle';
   }
 }

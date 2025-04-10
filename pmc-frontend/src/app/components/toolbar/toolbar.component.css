@@ -27,17 +27,63 @@
 .checkbox-container {
     display: flex;
     align-items: center;
-    margin-right: 8px;
+    justify-content: center;
+    margin-right: 12px; /* Mehr Abstand zum Pfeil */
+    margin-left: -8px; /* Mehr nach links geschoben */
     cursor: pointer;
+    width: 18px;
+    height: 48px; /* Gleiche Höhe wie die Toolbar */
+    position: relative;
 }
 
 .checkbox-container i {
     font-size: 16px;
-    color: var(--text-medium);
+    color: transparent;
+    position: relative;
+    z-index: 1;
 }
 
-.checkbox-container i.fa-check-square {
-    color: var(--primary-color);
+.checkbox-container i.fa-square::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%); /* Vertikal zentrieren */
+    border-radius: 2px;
+    background-color: var(--background-medium);
+    border: 1px solid var(--border-color);
+}
+
+.checkbox-container i.fa-check-square::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%); /* Vertikal zentrieren */
+    border-radius: 2px;
+    background-color: #785acb; /* Purple Farbe, wie für den Pfeil */
+    border: 1px solid #785acb;
+}
+
+.checkbox-container i.fa-check-square::after {
+    content: "\f00c";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%); /* Vertikal zentrieren */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
 }
 
 /* Dropdown toggle */
@@ -45,17 +91,84 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    position: relative;
+    padding: 0 8px;
+    border-radius: 4px;
 }
 
-.chevron-down::after {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid var(--text-medium);
-    border-bottom: 2px solid var(--text-medium);
-    transform: rotate(45deg);
-    margin-top: -4px;
+.dropdown-toggle:hover {
+    background-color: var(--hover-bg);
+}
+
+.dropdown-toggle.dropdown-open {
+    background-color: rgba(120, 90, 203, 0.1);
+}
+
+/* Styling für die FontAwesome-Pfeile */
+.dropdown-toggle i {
+    font-size: 16px;
+    color: var(--text-medium);
+    transition: color 0.2s ease;
+}
+
+.dropdown-toggle.dropdown-open i {
+    color: #785acb; /* Lila Farbe für den aktiven Pfeil */
+}
+
+.dropdown-toggle i.fa-caret-up,
+.dropdown-toggle i.fa-caret-down {
+    padding: 4px;
+}
+
+.current-filter {
+    margin-right: 6px;
+    font-size: 13px;
+}
+
+/* Dropdown-Menü */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    min-width: 140px;
+    background-color: var(--background-light);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.dropdown-header {
+    padding: 8px 12px;
+    background-color: var(--background-light);
+    font-weight: bold;
+    font-size: 13px;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-options li {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.dropdown-options li:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-options li.active {
+    background-color: rgba(120, 90, 203, 0.1);
+    color: #785acb;
+    font-weight: 500;
 }
 
 /* Pagination */

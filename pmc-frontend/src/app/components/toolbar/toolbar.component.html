@@ -3,8 +3,20 @@
         <div class="checkbox-container" (click)="toggleSelectAll()">
             <i class="fas" [ngClass]="{'fa-square': !allSelected, 'fa-check-square': allSelected}"></i>
         </div>
-        <div class="dropdown-toggle">
-            <span class="chevron-down"></span>
+        <div class="dropdown-toggle" (click)="toggleDropdown($event)" [class.dropdown-open]="isDropdownOpen">
+            <i class="fas" [ngClass]="{'fa-caret-down': !isDropdownOpen, 'fa-caret-up': isDropdownOpen}"></i>
+            
+            <!-- Dropdown-Menü -->
+            <div class="dropdown-menu" *ngIf="isDropdownOpen">
+                <div class="dropdown-header">{{ currentFilterLabel }}</div>
+                <ul class="dropdown-options">
+                    <li *ngFor="let option of filterOptions" 
+                        [class.active]="selectedFilter === option.value"
+                        (click)="selectFilterOption(option.value, $event)">
+                        {{ option.label }}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
