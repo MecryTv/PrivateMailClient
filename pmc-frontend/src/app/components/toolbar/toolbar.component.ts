@@ -11,9 +11,13 @@ export class ToolbarComponent {
   @Input() itemsPerPage: number = 25;
   @Input() currentPage: number = 1;
   @Input() allSelected: boolean = false;
+  @Input() selectedEmailsCount: number = 0;
   
   @Output() pageChange = new EventEmitter<number>();
   @Output() selectAllChange = new EventEmitter<boolean>();
+  @Output() deleteSelectedEmails = new EventEmitter<void>();
+  @Output() moveSelectedEmails = new EventEmitter<void>();
+  @Output() cancelEmailSelection = new EventEmitter<void>();
   
   /**
    * Berechnet die aktuelle Anzeigeinformation (z.B. "1-25 von 100")
@@ -69,5 +73,26 @@ export class ToolbarComponent {
   toggleSelectAll(): void {
     this.allSelected = !this.allSelected;
     this.selectAllChange.emit(this.allSelected);
+  }
+
+  /**
+   * Löst das Event zum Löschen der ausgewählten E-Mails aus
+   */
+  deleteSelected(): void {
+    this.deleteSelectedEmails.emit();
+  }
+
+  /**
+   * Löst das Event zum Verschieben der ausgewählten E-Mails aus
+   */
+  moveSelected(): void {
+    this.moveSelectedEmails.emit();
+  }
+
+  /**
+   * Löst das Event zum Abbrechen der E-Mail-Auswahl aus
+   */
+  cancelSelection(): void {
+    this.cancelEmailSelection.emit();
   }
 }

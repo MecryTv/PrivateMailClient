@@ -97,14 +97,15 @@
     border: none;
     color: var(--text-medium);
     cursor: pointer;
-    width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 2px;
+    margin: 0 4px;
     border-radius: 4px;
     transition: background-color 0.2s;
+    padding: 0 8px;
+    font-size: 13px;
 }
 
 .action-button:hover {
@@ -118,4 +119,35 @@
 
 .action-button i {
     font-size: 14px;
+    margin-right: 4px;
+}
+
+/* Auswahlaktionen */
+.selection-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.selected-count {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.action-button.delete {
+    color: var(--danger);
+}
+
+.action-button.move {
+    color: var(--text-medium);
+}
+
+.action-button.cancel {
+    color: var(--text-dim);
 }

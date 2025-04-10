@@ -20,6 +20,11 @@ export class MailsComponent implements OnInit {
   selectedEmails: Set<number> = new Set<number>();
   allEmailsSelected: boolean = false;
   
+  // Anzahl der ausgewählten E-Mails
+  get selectedEmailsCount(): number {
+    return this.selectedEmails.size;
+  }
+  
   // States für Antworten/Weiterleiten
   isReplying = false;
   isForwarding = false;
@@ -278,6 +283,47 @@ export class MailsComponent implements OnInit {
       // Alle E-Mails der aktuellen Seite abwählen
       this.displayedEmails.forEach(email => this.selectedEmails.delete(email.id));
     }
+  }
+  
+  /**
+   * Löscht die ausgewählten E-Mails (aktuell nur Simulation)
+   */
+  deleteSelectedEmails(): void {
+    // Hier würde später eine API-Anfrage zum Löschen der E-Mails erfolgen
+    console.log(`${this.selectedEmailsCount} E-Mails werden gelöscht:`, [...this.selectedEmails]);
+    
+    // Simulierte Löschoperation
+    this.emails = this.emails.filter(email => !this.selectedEmails.has(email.id));
+    
+    // Auswahl zurücksetzen
+    this.selectedEmails.clear();
+    this.allEmailsSelected = false;
+    
+    // Stellen Sie sicher, dass die aktuelle Seite gültig ist
+    this.validateCurrentPage();
+  }
+  
+  /**
+   * Verschiebt die ausgewählten E-Mails in einen anderen Ordner (aktuell nur Simulation)
+   */
+  moveSelectedEmails(): void {
+    // Hier würde später eine UI zum Auswählen des Zielordners angezeigt
+    console.log(`${this.selectedEmailsCount} E-Mails werden verschoben:`, [...this.selectedEmails]);
+    
+    // In einer vollständigen Implementierung würde hier eine Ordnerauswahl angezeigt
+    alert(`${this.selectedEmailsCount} E-Mails werden verschoben (Ordnerauswahl noch nicht implementiert)`);
+    
+    // Auswahl zurücksetzen
+    this.selectedEmails.clear();
+    this.allEmailsSelected = false;
+  }
+  
+  /**
+   * Bricht die aktuelle Auswahl ab und setzt alle Auswahlstatus zurück
+   */
+  cancelSelection(): void {
+    this.selectedEmails.clear();
+    this.allEmailsSelected = false;
   }
   
   /**

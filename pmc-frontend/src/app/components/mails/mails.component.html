@@ -8,8 +8,12 @@
         [itemsPerPage]="itemsPerPage"
         [currentPage]="currentPage"
         [allSelected]="allEmailsSelected"
+        [selectedEmailsCount]="selectedEmailsCount"
         (pageChange)="onPageChange($event)"
-        (selectAllChange)="handleSelectAllChange($event)">
+        (selectAllChange)="handleSelectAllChange($event)"
+        (deleteSelectedEmails)="deleteSelectedEmails()"
+        (moveSelectedEmails)="moveSelectedEmails()"
+        (cancelEmailSelection)="cancelSelection()">
     </app-toolbar>
     
     <!-- E-Mail-Liste und Inhaltsbereich -->

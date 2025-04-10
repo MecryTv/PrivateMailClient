@@ -8,8 +8,10 @@
         </div>
     </div>
 
+    <!-- Toolbar-Mitte: Zeigt Paginierung oder Aktionen an, abhängig vom Auswahlstatus -->
     <div class="toolbar-center">
-        <div class="pagination">
+        <!-- Paginierung (nur anzeigen, wenn keine E-Mails ausgewählt sind) -->
+        <div class="pagination" *ngIf="selectedEmailsCount === 0">
             <span class="page-info">{{ paginationInfo }}</span>
             <button class="nav-button prev" 
                     [disabled]="!canNavigatePrevious"
@@ -23,6 +25,22 @@
                     (click)="navigateToNextPage()">
                 <i class="fas fa-chevron-right"></i>
             </button>
+        </div>
+
+        <!-- Aktionen für ausgewählte E-Mails (nur anzeigen, wenn E-Mails ausgewählt sind) -->
+        <div class="selection-actions" *ngIf="selectedEmailsCount > 0">
+            <span class="selected-count">{{ selectedEmailsCount }} ausgewählt</span>
+            <div class="action-buttons">
+                <button class="action-button delete" (click)="deleteSelected()">
+                    <i class="fas fa-trash"></i> Löschen
+                </button>
+                <button class="action-button move" (click)="moveSelected()">
+                    <i class="fas fa-folder"></i> Verschieben
+                </button>
+                <button class="action-button cancel" (click)="cancelSelection()">
+                    <i class="fas fa-times"></i> Auswahl abbrechen
+                </button>
+            </div>
         </div>
     </div>
 </div>
